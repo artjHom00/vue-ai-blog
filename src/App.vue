@@ -1,22 +1,32 @@
 <template>
-  <div class="container">
+  
     <nav>
-      <div>
-        <small>Fully Powered By AI</small>
-      </div>
-      <div>
-        <small>RENÉE</small>
+      <div class="container">
+        <div>
+          <small>* Fully Powered By AI</small>
+        </div>
+        <div>
+          <small><router-link to="/">All Articles</router-link></small>
+        </div>
       </div>
     </nav>
-
-    <div class="wrapper">
-      <router-view/>
+    <div class="container">
+      <div class="wrapper">
+        <router-view/>
+      </div>
     </div>
-  </div>
+
 </template>
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 30px;
+  min-height: 100vh;
+}
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -26,21 +36,25 @@
 }
 
 nav {
-  display: flex;
-  justify-content: space-between;
   padding: 30px 0;
-  a:hover {
-    text-decoration: underline;
+  border-bottom: 1px solid #eaeaea;
+  .container {
+    display: flex;
+    justify-content: space-between;
+  }
+  a {
+    margin-right: 20px;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
 h1,h2,h3,h4,h5,h6 {
   font-family: 'Bebas Neue', sans-serif;
-  margin: 0;
 }
 
 a {
-  margin-right: 20px;
   color: #161616;
   text-decoration: none;
 }
