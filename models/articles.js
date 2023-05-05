@@ -4,7 +4,7 @@ const articlesSchema = new Schema({
     image: {
         type: String,
         required: true,
-        default: 'https://i.pinimg.com/originals/0d/94/e9/0d94e97b264f27373a0dcb5a4347ab33.jpg' // set default image pic if not found
+        default: 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg' // set default image pic if not found
     },
     heading: {
         type: String,

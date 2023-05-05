@@ -9,4 +9,6 @@ router.get('/get-article/:id', apiController.getFullArticle)
 router.get('/get-related', apiController.getRandomRelated)
 router.post('/create-article', apiController.createArticle)
 
+router.get('/generate-article', apiController.generateArticle)
+
 module.exports = router
