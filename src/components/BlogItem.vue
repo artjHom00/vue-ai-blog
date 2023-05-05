@@ -1,12 +1,12 @@
 <template>
-    <router-link class="blog-router" :to="{ path: `article/${blog.id}`}" >
+    <router-link class="blog-router" :to="{ path: `article/${blog._id}`}" >
         <div class="blog">
                 <div class="img" :style="{
-                'background-image': `url(${blog.img})`}">
+                'background-image': `url(${blog.image})`}">
                 </div>
             <div class="blog-content">
                 <h1>{{ blog.heading }}</h1>
-                <p>{{ blog.text }}</p>
+                <p v-html="blog.snippet"></p>
                 <small>{{ formatDate(blog.date) }}</small>
             </div>
         </div>

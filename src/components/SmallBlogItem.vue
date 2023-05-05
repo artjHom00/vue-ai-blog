@@ -1,6 +1,6 @@
 <template>
-    <router-link :to="{path: `/article/${data.id}`}">
-        <div class="related-blog" :style="{'background-image': `url(${data.img})`}">
+    <router-link :to="{path: `/article/${data._id}`}">
+        <div class="related-blog" :style="{'background-image': `url(${data.image})`}">
             <h3>{{ data.heading }}</h3>
         </div>
     </router-link>
