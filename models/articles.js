@@ -30,6 +30,12 @@ const articlesSchema = new Schema({
     video: {
         type: String,
         required: false
+    },
+    subject_id: {
+        type: Schema.Types.ObjectId,
+        required: false,
+        default: null,
+        ref: 'subjects'
     }
 });
 

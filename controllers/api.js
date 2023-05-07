@@ -1,4 +1,5 @@
 let articles = require('../models/articles.js')
+let subjects = require('../models/subjects.js')
 let OpenAIApi = require('../services/openai')
 require('dotenv').config()
 
@@ -103,12 +104,41 @@ class APIController {
     }
 
     async generateArticle(req, res) {
-        let generated = await openai.createSEOArticle(req.query.subject)
+
+        // получаем случайную тему для создания статьи
+        let getRandomSubject = async () => {
+            return new Promise(async (resolve, reject) => {
+                const random = Math.floor(Math.random() * (await subjects.count()))
+                
+                await subjects.findOne({
+                    is_published: false
+                }).skip(random)
+                .then((subject) => {
+                    resolve(subject)
+                })
+                .catch((err) => {
+                    reject(err)
+                })
+            })
+        }
+
+        const subject = await getRandomSubject()
+        console.log("🚀 ~ file: api.js:126 ~ APIController ~ generateArticle ~ subject:", subject._id + ' ' + subject.name)
+
+        let generated = await openai.createSEOArticle(subject.name)
         
         await articles.create({
-            heading: req.query.subject,
+            heading: subject.name,
             text: generated[0].text,
-        }).then((article) => {
+            subject_id: subject._id
+        }).then(async (article) => {
+
+            await subjects.findOneAndUpdate({
+                _id: subject._id
+            }, {
+                is_published: true
+            })
+
             res.json({
                 "is_success": true,
                 "data": article
@@ -119,6 +149,52 @@ class APIController {
                 "message": err
             })
         })
+    }
+
+    async generateSubjects(req, res) {
+        /* 
+        преобразовывает 
+            1. Example Name
+        в
+            ['Example Name']
+        */
+        let transformListToArray = (str) => {
+
+            let arr = str.split(/\d+\.\s*/).map((v) => {
+                return v.replace('\n', '')
+            })
+
+            arr.shift()
+
+            return arr
+            
+        }
+
+        // деконструирует в переменную generated ответ chatgpt 
+        let [{text: generated}] = await openai.generateSubjectsForArticles()
+        
+        for await (const v of  transformListToArray(generated)) {
+            subjects.findOneAndUpdate({
+                name: v
+            }, {
+                $set: {
+                    name: v
+                }
+            }, { new: true, upsert: true, setDefaultsOnInsert: true })
+            .catch((err) => {
+                res.json({
+                    "is_success": false,
+                    "err": err
+                })
+
+                return
+            })
+        }
+
+        res.json({
+            "is_success": true
+        })
+        
     }
 }
 
