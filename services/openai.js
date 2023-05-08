@@ -12,7 +12,7 @@ class OpenAIService {
     
     }
 
-    // генерация сео-оптимизированной статьи по теме 
+    // генерация сео-оптимизированной статьи по теме
     async createSEOArticle(subject, options) {
         
         if(!options) options = {}
@@ -26,9 +26,25 @@ class OpenAIService {
                 ...options
             }
     
-            let { data: { choices: response } } = await this.openai.createCompletion(params)
+            let { data: { choices: text } } = await this.openai.createCompletion(params)
+            
+            text = text[0].text
+            params = {
+                model: "gpt-3.5-turbo",
+                messages: [{ role: "user", content: 
+                    `Summarise it:
+                    ${text}`
+                }] 
+            }
 
-            return response
+            let { data: { choices: snippet } } = await this.openai.createChatCompletion(params)
+
+            snippet = snippet[0].message.content
+            
+            return {
+                text,
+                snippet
+            }
 
         } catch(e) {
             return e

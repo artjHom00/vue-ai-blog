@@ -37,7 +37,19 @@ const articlesSchema = new Schema({
         default: null,
         ref: 'subjects'
     }
-});
+})
+
+// articlesSchema.pre('save', async function(next) {
+//     function getFirstNWords(str) {
+//         return str.split(/\s+/).slice(0, 50).join(' ') + '...'
+//     }
+//     const article = this;
+
+//     if(!article.snippet) return next()
+
+//     article.snippet = getFirstNWords(article.snippet)
+//     next()
+// })
 
 const articles = model('articles', articlesSchema)
 
